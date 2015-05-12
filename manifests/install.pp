@@ -1,7 +1,7 @@
 # installing artifactory
 class artifactory::install {
 
-  $version = '3.5.3'
+  $version = '3.6.0'
   $sourceforge = 'http://garr.dl.sourceforge.net/project'
 
   package{'unzip':
@@ -23,7 +23,7 @@ class artifactory::install {
     $install_path = "artifactory-powerpack-${version}"
     archive::extract{"artifactory-powerpack-standalone-${version}":
       ensure     => present,
-      src_target => '/vagrant',
+      src_target => 'puppet:///modules/artifactory',
       target     => '/usr/share',
       extension  => 'zip',
       require          => Package['unzip'],

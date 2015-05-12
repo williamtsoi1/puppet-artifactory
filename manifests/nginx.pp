@@ -1,25 +1,31 @@
-# Setting up reverse proxy as mentioned under 
+# Setting up reverse proxy as mentioned under
 class artifactory::nginx(
   $certdir = '/etc/nginx/ssl',
-  $key = "${::fqdn}.key",
-  $crt = "${::fqdn}.crt"
+  $key = "artifactory.ozforex.local.key",
+  $crt = "artifactory.ozforex.local.crt"
 ) {
-  
+
   file{$certdir:
     ensure => directory,
   }
 
-  $key_gen = "openssl req -newkey rsa:2048 -nodes -keyout ${::fqdn}.key  -x509 -days 365 -out ${::fqdn}.crt -subj '/CN=${::fqdn}'"
-
-  $chipers = 'ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP'
-
-  exec {'create_self_signed_sslcert':
-    command => $key_gen,
-    cwd     => $certdir,
-    creates => [ "${certdir}/${::fqdn}.key", "${certdir}/${::fqdn}.crt", ],
-    path    => ['/usr/bin', '/usr/sbin']
+  file { '$certdir/$key':
+    ensure  => file,
+    mode    => '0644',
+    source  => 'puppet:///modules/artifactory/$key',
+    owner   => root,
+    group   => root,
+    require => File[$certdir]
   } ~> Service['nginx']
 
+  file { '$certdir/$crt':
+    ensure  => file,
+    mode    => '0644',
+    source  => 'puppet:///modules/artifactory/$crt',
+    owner   => root,
+    group   => root,
+    require => File[$certdir]
+  } ~> Service['nginx']
 
   package{'nginx':
     ensure  => present
