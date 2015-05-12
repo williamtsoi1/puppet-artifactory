@@ -9,19 +9,19 @@ class artifactory::nginx(
     ensure => directory,
   }
 
-  file { '$certdir/$key':
+  file { '/etc/nginx/ssl/artifactory.ozforex.local.key':
     ensure  => file,
     mode    => '0644',
-    source  => 'puppet:///modules/artifactory/$key',
+    source  => 'puppet:///modules/artifactory/artifactory.ozforex.local.key',
     owner   => root,
     group   => root,
     require => File[$certdir]
   } ~> Service['nginx']
 
-  file { '$certdir/$crt':
+  file { '/etc/nginx/ssl/artifactory.ozforex.local.crt':
     ensure  => file,
     mode    => '0644',
-    source  => 'puppet:///modules/artifactory/$crt',
+    source  => 'puppet:///modules/artifactory/artifactory.ozforex.local.crt',
     owner   => root,
     group   => root,
     require => File[$certdir]

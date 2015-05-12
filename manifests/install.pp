@@ -23,7 +23,7 @@ class artifactory::install {
     $install_path = "artifactory-powerpack-${version}"
     archive::extract{"artifactory-powerpack-standalone-${version}":
       ensure     => present,
-      src_target => 'puppet:///modules/artifactory',
+      src_target => 'modules/artifactory/files',
       target     => '/usr/share',
       extension  => 'zip',
       require          => Package['unzip'],
